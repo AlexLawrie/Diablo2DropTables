@@ -1,0 +1,70 @@
+<?php
+require("../php/functions.php");
+require("../php/db.php");
+session_start();
+if(!isset($_SESSION['admin'])){
+    echo"<script>\n";
+	echo"alert('Administrators Only!');\n";
+	echo"window.location='../index.php';\n";
+	echo"</script>";
+}
+?>
+
+<?php
+headersadmin();
+?>
+
+ <!-- Background Video-->
+ <video class="bg-video" playsinline="playsinline" autoplay="autoplay" muted="muted" loop="loop"><source src="../assets/mp4/admin.mp4" type="video/mp4" /></video>
+
+<div class="masthead">
+    <div class="masthead-content text-white">
+        <div class="container-fluid px-4 px-lg-0">
+            <h1 class="lh-1 mb-5">Remove Administrator</h1>
+
+<?php
+if(!isset($_POST['submit'])){
+?>
+
+            <fieldset>
+				<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
+                <div class="spacediv row input-group-newsletter">
+                            <div class="col"><input class="form-control" name="adminname" id="adminname" type="text" placeholder="Administrator Name"></div> 
+                        </div>
+
+                        <div class="form-group">
+                    <input class="btn btn-secondary btn-primary btn-lg col-sm-12" type="submit" name="submit" value="Remove Administrator">
+					</div>
+                    <fieldset>
+            </form>
+
+            <?php
+} else {
+    $adminname = $_POST['adminname'];
+
+    $delete_admin = "DELETE FROM admins WHERE username='$adminname';";
+    $delete_admin_query = mysqli_query($con, $delete_admin);
+    if($delete_admin_query){
+        mysqli_close($con);
+        echo"<script>\n";
+        echo"window.location='adminpanel.php';\n";
+        echo"</script>";
+    } else {
+                    $error = mysqli_errno($con);
+                    echo "<script>alert('Error in deleting administrator: ".$error.");</script> ";
+                    exit;
+    }
+}
+            ?>
+
+
+            
+</fieldset>
+            </form> 
+        </div>
+    </div>
+</div>
+
+<?php
+footersadminextra();
+?>
